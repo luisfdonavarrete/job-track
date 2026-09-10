@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 
 #[Table(key: 'id', keyType: 'uuid', incrementing: false)]
+#[Fillable (['title', 'job_url', 'location', 'description', 'status', 'salary_min', 'salary_max', 'user_id', 'company_id', 'applied_at', 'follow_up_at'])]
 class JobApplication extends Model
 {
     use HasUuids;
@@ -20,7 +22,16 @@ class JobApplication extends Model
     }
 
     public function user(): BelongsTo
-     {
+    {
          return $this->belongsTo(User::class);
-     }
+    }
+
+    protected function casts(): array {
+        return [
+            'applied_at' => 'datetime',
+            'follow_up_at' => 'datetime',
+            'salary_min' => 'decimal:2',    
+            'salary_max' => 'decimal:2',
+        ];
+    }
 }

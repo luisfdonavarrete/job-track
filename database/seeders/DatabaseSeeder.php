@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
+use App\Models\JobApplication;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,19 +17,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
+        $demoUser = User::firstOrCreate(['email' => 'test@example.com'], User::factory()->raw([
             'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        ]));
 
-        $user = User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test1@example.com',
-        ]);
-        $this->callWith(CompanySeeder::class, [
-            'user' => $user
-        ]);
+        $users = User::factory()->count(2)->create()->prepend($demoUser);
+
+        $this->call(CompanySeeder::class);
+
+        foreach (Company::all() as $company) {
+            foreach ($users as $user) {
+                JobApplication::factory()
+                    ->for($user)
+                    ->for($company)
+                    ->count(4)
+                    ->sequence(
+                        ['status' => 'applied', 'follow_up_at' => now()->addWeek()],
+                        ['status' => 'interviewing', 'follow_up_at' => now()->addDays(2)],
+                        ['status' => 'offered', 'follow_up_at' => null],
+                        ['status' => 'rejected', 'follow_up_at' => null],
+                    )
+                    ->create();
+            }
+        }
     }
 }

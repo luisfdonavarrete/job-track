@@ -2,26 +2,16 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Company;
-use App\Models\JobApplication;
-use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class CompanySeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
-    public function run(User $user): void
+    public function run(): void
     {
-
-        Company::factory()->hasJobApplications(2)->create();
-
-        $company = Company::factory()->create();
-
-        JobApplication::factory(2)->create([
-            'user_id' => $user->id,
-            'company_id' => $company->id,
-        ]);
+        Company::factory()->count(3)->create();
     }
 }

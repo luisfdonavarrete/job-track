@@ -11,24 +11,25 @@
             </flux:sidebar.header>
 
             <flux:sidebar.nav>
-                <flux:sidebar.group :heading="__('Platform')" class="grid">
+                <flux:sidebar.group :heading="__('Workspace')" class="grid">
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item :href="route('job-applications.index')" :current="request()->routeIs('job-applications.*')" wire:navigate>
+                        {{ __('Job applications') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item :href="route('companies.index')" :current="request()->routeIs('companies.*')" wire:navigate>
+                        {{ __('Companies') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
             <flux:spacer />
 
-            <flux:sidebar.nav>
-                <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                    {{ __('Repository') }}
-                </flux:sidebar.item>
-
-                <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                    {{ __('Documentation') }}
-                </flux:sidebar.item>
-            </flux:sidebar.nav>
+            <div class="mx-2 rounded-xl border border-zinc-200 p-4 dark:border-zinc-700">
+                <p class="text-xs font-semibold uppercase tracking-widest text-teal-700 dark:text-teal-400">{{ __('One step forward') }}</p>
+                <p class="mt-2 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">{{ __('Your next opportunity starts with a little organization.') }}</p>
+            </div>
 
             <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
         </flux:sidebar>

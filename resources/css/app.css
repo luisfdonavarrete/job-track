@@ -64,3 +64,66 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+@layer components {
+    .jt-page {
+        @apply mx-auto flex w-full max-w-6xl flex-col gap-7 py-4 lg:py-8;
+    }
+    .jt-title {
+        @apply text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl;
+    }
+    .jt-eyebrow {
+        @apply mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-teal-700 dark:text-teal-400;
+    }
+    .jt-primary {
+        @apply inline-flex min-h-11 items-center justify-center rounded-xl bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-600 dark:bg-teal-400 dark:text-zinc-950 dark:hover:bg-teal-300;
+    }
+    .jt-back {
+        @apply w-fit text-sm font-medium text-zinc-500 transition hover:text-teal-700 dark:text-zinc-400 dark:hover:text-teal-300;
+    }
+    .jt-table {
+        @apply overflow-x-auto rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-700 dark:bg-zinc-900;
+    }
+    .jt-table thead {
+        @apply bg-zinc-50 text-xs uppercase tracking-wider text-zinc-500 dark:bg-zinc-900 dark:text-zinc-400;
+    }
+    .jt-table tbody tr {
+        @apply transition-colors hover:bg-teal-50/50 dark:hover:bg-teal-400/5;
+    }
+    .jt-table th, .jt-table td {
+        @apply px-6 py-5;
+    }
+    .jt-table a {
+        @apply no-underline transition hover:text-teal-700 dark:hover:text-teal-300;
+    }
+    .jt-notice {
+        @apply rounded-xl border border-teal-200 bg-teal-50 px-5 py-4 text-sm text-teal-800 dark:border-teal-800 dark:bg-teal-950 dark:text-teal-200;
+    }
+    .jt-form-card {
+        @apply max-w-4xl rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900 sm:p-8;
+    }
+    .jt-form-grid {
+        @apply grid gap-x-6 gap-y-6 sm:grid-cols-2;
+    }
+    .jt-form-grid label {
+        @apply text-sm font-medium text-zinc-700 dark:text-zinc-200;
+    }
+    .jt-form-grid input, .jt-form-grid select, .jt-form-grid textarea {
+        @apply min-h-11 rounded-xl border-zinc-300 bg-zinc-50 px-3.5 py-2.5 text-sm text-zinc-900 transition focus:border-teal-500 focus:outline-2 focus:outline-teal-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100;
+    }
+    .jt-form-actions {
+        @apply flex flex-wrap items-center gap-5 border-t border-zinc-200 pt-6 dark:border-zinc-700 sm:col-span-2;
+    }
+    .jt-form-actions a {
+        @apply text-sm font-medium text-zinc-500 no-underline hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white;
+    }
+    .jt-details {
+        @apply grid gap-7 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900 sm:grid-cols-2 sm:p-8;
+    }
+    .jt-details dt {
+        @apply mb-2 text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400;
+    }
+    .jt-details dd {
+        @apply text-sm leading-7 text-zinc-800 dark:text-zinc-200;
+    }
+}

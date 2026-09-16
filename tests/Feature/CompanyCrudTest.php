@@ -21,7 +21,8 @@ test('users can create a company with only validated fields', function () {
     $this->actingAs(User::factory()->create())->post(route('companies.store'), [
         'name' => 'Example Company', 'website' => 'https://example.com',
         'location' => 'Toronto', 'description' => 'A company.', 'id' => 'untrusted-id',
-    ])->assertSessionHasNoErrors()->assertRedirect(route('companies.show', Company::sole()));
+    ])->assertSessionHasNoErrors()->assertRedirect(route('companies.show', Company::sole()))
+        ->assertSessionHas('status', 'Company created successfully.');
 
     $this->assertDatabaseHas('companies', ['name' => 'Example Company', 'website' => 'https://example.com', 'location' => 'Toronto', 'description' => 'A company.']);
     expect(Company::sole()->id)->not->toBe('untrusted-id');

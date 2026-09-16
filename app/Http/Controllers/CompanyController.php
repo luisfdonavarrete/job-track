@@ -33,7 +33,7 @@ class CompanyController extends Controller
     {
         $company = Company::create($request->validated());
 
-        return redirect()->route('companies.index', $company)->with('status', 'Company created successfully.');
+        return redirect()->route('companies.show', $company)->with('status', 'Company created successfully.');
     }
 
     /**

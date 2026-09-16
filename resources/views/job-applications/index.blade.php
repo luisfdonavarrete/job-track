@@ -36,11 +36,8 @@
                             <td class="px-5 py-4">
                                 <span @class([
                                     'inline-flex rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap',
-                                    'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300' => $application->status === 'applied',
-                                    'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300' => $application->status === 'interviewing',
-                                    'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' => $application->status === 'offered',
-                                    'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300' => ! in_array($application->status, ['applied', 'interviewing', 'offered']),
-                                ])>{{ ucfirst($application->status) }}</span>
+                                    $application->status->colorClass() => true,
+                                ])>{{ $application->status->toString() }}</span>
                             </td>
                             <td class="whitespace-nowrap px-5 py-4 tabular-nums">
                                 @if ($application->salary_min !== null && $application->salary_max !== null)

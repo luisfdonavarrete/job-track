@@ -28,8 +28,8 @@
     <div>
         <label for="status" class="block text-sm font-medium">{{ __('Status') }}</label>
         <select id="status" name="status" required class="mt-2 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 dark:border-zinc-600 dark:bg-zinc-900">
-            @foreach (['applied', 'interviewing', 'offered', 'rejected'] as $status)
-                <option value="{{ $status }}" @selected(old('status', $jobApplication->status ?? 'applied') === $status)>{{ ucfirst($status) }}</option>
+            @foreach (App\Enums\JobApplications\Status::cases() as $status)
+                <option value="{{ $status->value }}" @selected(old('status', $jobApplication->status->value ?? 'applied') === $status->value)>{{ $status->toString() }}</option>
             @endforeach
         </select>
         @error('status')<p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>@enderror

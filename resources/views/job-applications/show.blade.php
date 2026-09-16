@@ -6,7 +6,13 @@
         <dl class="jt-details">
             <div><dt class="font-medium">{{ __('Company') }}</dt><dd>{{ $jobApplication->company->name }}</dd></div>
             @foreach (['status' => 'Status', 'job_url' => 'Job URL', 'location' => 'Location', 'description' => 'Description', 'salary_min' => 'Minimum salary', 'salary_max' => 'Maximum salary'] as $field => $label)
-                <div><dt class="font-medium">{{ __($label) }}</dt><dd class="mt-1 whitespace-pre-line break-words">{{ $jobApplication->{$field} ?? __('Not specified') }}</dd></div>
+                <div><dt class="font-medium">{{ __($label) }}</dt><dd class="mt-1 whitespace-pre-line break-words">
+                    @if ($field === 'status')
+                        {{ $jobApplication->status->toString() }}
+                    @else
+                        {{ $jobApplication->{$field} ?? __('Not specified') }}
+                    @endif
+                </dd></div>
             @endforeach
             <div><dt class="font-medium">{{ __('Applied at') }}</dt><dd>{{ $jobApplication->applied_at?->format('M j, Y H:i') ?? __('Not recorded') }}</dd></div>
             <div><dt class="font-medium">{{ __('Follow-up at') }}</dt><dd>{{ $jobApplication->follow_up_at?->format('M j, Y H:i') ?? __('Not scheduled') }}</dd></div>

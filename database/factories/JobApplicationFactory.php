@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\JobApplications\Status;
 use App\Models\Company;
 use App\Models\JobApplication;
 use App\Models\User;
@@ -30,7 +31,7 @@ class JobApplicationFactory extends Factory
             'description' => fake()->paragraph(),
             'salary_min' => $salaryMin,
             'salary_max' => $salaryMin + fake()->numberBetween(10000, 30000),
-            'status' => fake()->randomElement(['applied', 'interviewing', 'offered', 'rejected']),
+            'status' => fake()->randomElement(array_map(fn ($status) => $status->value, Status::cases())),
             'applied_at' => fake()->dateTimeBetween('-1 year', 'now'),
         ];
     }

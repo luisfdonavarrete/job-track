@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\JobApplications\Status;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -28,7 +29,7 @@ class StoreJobApplicationRequest extends FormRequest
             'job_url' => ['nullable', 'url:http,https', 'max:255'],
             'location' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'status' => ['required', 'in:applied,interviewing,offered,rejected'],
+            'status' => ['required', Rule::in(array_map(fn ($status) => $status->value, Status::cases()))],
             'salary_min' => ['nullable', 'numeric', 'min:0', 'max:99999999.99'],
             'salary_max' => ['nullable', 'numeric', 'min:0', 'max:99999999.99', Rule::when($this->filled('salary_min'), 'gte:salary_min')],
             'company_id' => ['required', 'uuid', 'exists:companies,id'],

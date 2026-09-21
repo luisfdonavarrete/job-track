@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\JobApplications\ChangeJobApplicationStatus;
+use App\Enums\JobApplications\Status;
 use App\Http\Requests\StoreJobApplicationRequest;
 use App\Http\Requests\UpdateJobApplicationRequest;
 use App\Models\Company;
@@ -12,18 +14,20 @@ use Illuminate\Http\Request;
 
 class JobApplicationController extends Controller
 {
+    public function __construct(private readonly ChangeJobApplicationStatus $changeApplicationStatus) {}
+
     public function index(Request $request): View
     {
 
         return view('job-applications.index', [
             'jobApplications' => JobApplication::forUser($request->user())
-            ->with('company')
-            ->latest()
-            ->paginate(10),
+                ->with('company')
+                ->latest()
+                ->paginate(10),
         ]);
     }
 
-    public function create(Request $request): View
+    public function create(): View
     {
         return view('job-applications.create', ['companies' => Company::query()->orderBy('name')->get()]);
     }
@@ -37,7 +41,7 @@ class JobApplicationController extends Controller
 
     public function show(Request $request, JobApplication $jobApplication): View
     {
-    
+
         if ($request->user()->cannot('view', $jobApplication)) {
             abort(403);
         }
@@ -47,7 +51,7 @@ class JobApplicationController extends Controller
 
     public function edit(Request $request, JobApplication $jobApplication): View
     {
-        if ($request->user()->cannot('view', $jobApplication)) {
+        if ($request->user()->cannot('update', $jobApplication)) {
             abort(403);
         }
 
@@ -59,11 +63,16 @@ class JobApplicationController extends Controller
 
     public function update(UpdateJobApplicationRequest $request, JobApplication $jobApplication): RedirectResponse
     {
-        if ($request->user()->cannot('view', $jobApplication)) {
+        if ($request->user()->cannot('update', $jobApplication)) {
             abort(403);
         }
 
-        $jobApplication->update($request->validated());
+        ($this->changeApplicationStatus)(
+            $jobApplication,
+            Status::from($request->validated('status')),
+        );
+
+        $jobApplication->update($request->safe()->except('status'));
 
         return redirect()->route('job-applications.show', $jobApplication)->with('status', 'Job application updated successfully.');
     }

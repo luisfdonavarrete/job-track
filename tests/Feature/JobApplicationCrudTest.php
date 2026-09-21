@@ -44,7 +44,7 @@ test('creation uses the authenticated owner and persists application fields', fu
 });
 
 test('updates can change companies and clear optional values without transferring ownership', function () {
-    $application = JobApplication::factory()->create();
+    $application = JobApplication::factory()->create(['status' => 'applied']);
     $company = Company::factory()->create();
     $this->actingAs($application->user)->put(route('job-applications.update', $application), [
         'title' => 'Updated role', 'company_id' => $company->id, 'status' => 'offered',
@@ -52,6 +52,11 @@ test('updates can change companies and clear optional values without transferrin
         'applied_at' => null, 'follow_up_at' => null,
     ])->assertSessionHasNoErrors()->assertRedirect(route('job-applications.show', $application));
     $this->assertDatabaseHas('job_applications', ['id' => $application->id, 'title' => 'Updated role', 'company_id' => $company->id, 'user_id' => $application->user_id, 'status' => 'offered', 'salary_min' => null, 'salary_max' => null, 'applied_at' => null, 'follow_up_at' => null]);
+    $this->assertDatabaseHas('activity_histories', [
+        'job_application_id' => $application->id,
+        'from_status' => 'applied',
+        'to_status' => 'offered',
+    ]);
 });
 
 test('invalid application fields are rejected without changing data', function (array $invalid, string $field) {

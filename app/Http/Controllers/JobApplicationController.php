@@ -19,7 +19,7 @@ class JobApplicationController extends Controller
         ]);
     }
 
-    public function create(): View
+    public function create(Request $request): View
     {
         return view('job-applications.create', ['companies' => Company::query()->orderBy('name')->get()]);
     }
@@ -33,14 +33,19 @@ class JobApplicationController extends Controller
 
     public function show(Request $request, JobApplication $jobApplication): View
     {
-        abort_unless($jobApplication->user_id === $request->user()->id, 403);
+    
+        if ($request->user()->cannot('view', $jobApplication)) {
+            abort(403);
+        }
 
         return view('job-applications.show', ['jobApplication' => $jobApplication->load('company')]);
     }
 
     public function edit(Request $request, JobApplication $jobApplication): View
     {
-        abort_unless($jobApplication->user_id === $request->user()->id, 403);
+        if ($request->user()->cannot('view', $jobApplication)) {
+            abort(403);
+        }
 
         return view('job-applications.edit', [
             'jobApplication' => $jobApplication,
@@ -50,6 +55,10 @@ class JobApplicationController extends Controller
 
     public function update(UpdateJobApplicationRequest $request, JobApplication $jobApplication): RedirectResponse
     {
+        if ($request->user()->cannot('view', $jobApplication)) {
+            abort(403);
+        }
+
         $jobApplication->update($request->validated());
 
         return redirect()->route('job-applications.show', $jobApplication)->with('status', 'Job application updated successfully.');
@@ -57,7 +66,9 @@ class JobApplicationController extends Controller
 
     public function destroy(Request $request, JobApplication $jobApplication): RedirectResponse
     {
-        abort_unless($jobApplication->user_id === $request->user()->id, 403);
+        if ($request->user()->cannot('view', $jobApplication)) {
+            abort(403);
+        }
 
         $jobApplication->delete();
 

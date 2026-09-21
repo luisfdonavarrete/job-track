@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Enums\JobApplications\Status;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +27,11 @@ class JobApplication extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    #[Scope]
+    protected function forUser(Builder $query, User $user): Builder {
+        return $query->where('user_id', $user->id);
     }
 
     protected function casts(): array

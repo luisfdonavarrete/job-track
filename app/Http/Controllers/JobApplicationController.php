@@ -14,8 +14,12 @@ class JobApplicationController extends Controller
 {
     public function index(Request $request): View
     {
+
         return view('job-applications.index', [
-            'jobApplications' => $request->user()->jobApplications()->with('company')->latest()->paginate(10),
+            'jobApplications' => JobApplication::forUser($request->user())
+            ->with('company')
+            ->latest()
+            ->paginate(10),
         ]);
     }
 

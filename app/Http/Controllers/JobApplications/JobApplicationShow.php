@@ -16,6 +16,6 @@ class JobApplicationShow extends Controller
             abort(403);
         }
 
-        return view('job-applications.show', ['jobApplication' => $jobApplication->load('company')]);
+        return view('job-applications.show', ['jobApplication' => $jobApplication->load('company', 'documents')]);
     }
 }

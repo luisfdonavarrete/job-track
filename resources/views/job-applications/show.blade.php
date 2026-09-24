@@ -16,7 +16,25 @@
             @endforeach
             <div><dt class="font-medium">{{ __('Applied at') }}</dt><dd>{{ $jobApplication->applied_at?->format('M j, Y H:i') ?? __('Not recorded') }}</dd></div>
             <div><dt class="font-medium">{{ __('Follow-up at') }}</dt><dd>{{ $jobApplication->follow_up_at?->format('M j, Y H:i') ?? __('Not scheduled') }}</dd></div>
+
+            @forelse ($jobApplication->documents as $document)
+                <div>
+                    <dt class="font-medium">{{ __($document->type->toString()) }}</dt>
+                    <dd>
+                        <span>{{ $document->original_filename }}</span>
+                        <a class="underline" href="{{ route('job-applications.document.download', [
+                            'jobApplication' => $jobApplication,
+                            'applicationDocument' => $document,
+                        ]) }}">
+                            {{ __('Download :document', ['document' => __($document->type->toString())]) }}
+                        </a>
+                    </dd>
+                </div>
+            @empty
+                <div><dt class="font-medium">{{ __('Documents') }}</dt><dd>{{ __('No documents uploaded.') }}</dd></div>
+            @endforelse
         </dl>
+
         <div class="flex items-center gap-4">
             <a href="{{ route('job-applications.edit', $jobApplication) }}" class="jt-primary">{{ __('Edit application') }}</a>
             <form method="POST" action="{{ route('job-applications.destroy', $jobApplication) }}" x-data @submit="if (! window.confirm('Delete this application?')) { $event.preventDefault() }">

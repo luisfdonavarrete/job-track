@@ -5,6 +5,7 @@ namespace App\Http\Controllers\JobApplications;
 use App\Http\Controllers\Controller;
 use App\Models\ApplicationDocument;
 use App\Models\JobApplication;
+use App\Support\ApplicationDocumentStorage;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -28,7 +29,7 @@ class JobApplicationDocumentDownload extends Controller
             abort(403);
         }
         /** @var FilesystemAdapter $disk */
-        $disk = Storage::disk('local');
+        $disk = ApplicationDocumentStorage::disk();
 
         abort_unless($disk->exists($applicationDocument->path), 404);
 

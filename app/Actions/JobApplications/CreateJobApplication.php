@@ -4,6 +4,7 @@ namespace App\Actions\JobApplications;
 
 use App\Models\JobApplication;
 use App\Models\User;
+use App\Support\ApplicationDocumentStorage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -19,7 +20,7 @@ class CreateJobApplication
      */
     public function __invoke(User $user, array $attributes, array $documents): JobApplication
     {
-        $disk = Storage::disk('local');
+        $disk = ApplicationDocumentStorage::disk();
         $storedPaths = [];
 
         try {

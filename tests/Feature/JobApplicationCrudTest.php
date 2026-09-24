@@ -3,6 +3,8 @@
 use App\Models\Company;
 use App\Models\JobApplication;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 test('guests cannot access application actions', function (string $method, string $action) {
     $application = JobApplication::factory()->create();
@@ -31,9 +33,12 @@ test('other users cannot access or modify an application', function (string $met
 })->with([['get', 'show'], ['get', 'edit'], ['put', 'update'], ['delete', 'destroy']]);
 
 test('creation uses the authenticated owner and persists application fields', function () {
+    Storage::fake('local');
     $user = User::factory()->create();
     $company = Company::factory()->create();
     $this->actingAs($user)->post(route('job-applications.store'), [
+        'resume' => UploadedFile::fake()->create('resume.pdf', 10, 'application/pdf'),
+        'cover_letter' => UploadedFile::fake()->create('cover.pdf', 10, 'application/pdf'),
         'title' => 'Developer', 'company_id' => $company->id, 'status' => 'applied',
         'user_id' => User::factory()->create()->id, 'job_url' => 'https://example.com/job',
         'salary_min' => 50000, 'salary_max' => 60000, 'applied_at' => '2026-09-14T12:00',
@@ -79,8 +84,11 @@ test('invalid application fields are rejected without changing data', function (
 ]);
 
 test('maximum salary does not require a minimum salary', function () {
+    Storage::fake('local');
     $user = User::factory()->create();
     $this->actingAs($user)->post(route('job-applications.store'), [
+        'resume' => UploadedFile::fake()->create('resume.pdf', 10, 'application/pdf'),
+        'cover_letter' => UploadedFile::fake()->create('cover.pdf', 10, 'application/pdf'),
         'title' => 'Role', 'company_id' => Company::factory()->create()->id,
         'status' => 'applied', 'salary_min' => null, 'salary_max' => 60000,
     ])->assertSessionHasNoErrors();

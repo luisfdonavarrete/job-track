@@ -34,6 +34,16 @@
         </select>
         @error('status')<p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
     </div>
+    <div>
+        <label for="resume" class="block text-sm font-medium">{{ __('Resume') }}</label>
+        <input id="resume" name="resume" type="file" class="mt-2 w-full rounded-lg border border-zinc-300 bg-transparent px-3 py-2 dark:border-zinc-600" accept=".pdf, .doc, .docx">
+        @error('resume')<p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
+    </div>
+    <div>
+        <label for="cover_letter" class="block text-sm font-medium">{{ __('Cover Letter') }}</label>
+        <input id="cover_letter" name="cover_letter" type="file" class="mt-2 w-full rounded-lg border border-zinc-300 bg-transparent px-3 py-2 dark:border-zinc-600" accept=".pdf, .doc, .docx">
+        @error('cover_letter')<p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
+    </div>
     <div class="sm:col-span-2">
         <label for="description" class="block text-sm font-medium">{{ __('Description') }}</label>
         <textarea id="description" name="description" rows="5" class="mt-2 w-full rounded-lg border border-zinc-300 bg-transparent px-3 py-2 dark:border-zinc-600">{{ old('description', $jobApplication->description ?? '') }}</textarea>

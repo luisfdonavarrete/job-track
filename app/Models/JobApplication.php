@@ -45,6 +45,11 @@ class JobApplication extends Model
         return $this->hasMany(ActivityHistory::class);
     }
 
+    public function documents(): HasMany
+    {
+        return $this->hasMany(ApplicationDocument::class);
+    }
+
     #[Scope]
     protected function forUser(Builder $query, User $user): Builder
     {

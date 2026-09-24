@@ -107,3 +107,15 @@ test('owners can delete applications without deleting the company', function () 
 test('missing applications return not found', function (string $method, string $action) {
     $this->actingAs(User::factory()->create())->{$method}(route('job-applications.'.$action, '00000000-0000-4000-8000-000000000000'))->assertNotFound();
 })->with([['get', 'show'], ['get', 'edit'], ['put', 'update'], ['delete', 'destroy']]);
+
+test('unfinished document resource endpoints are not exposed', function (string $method, string $path) {
+    $application = JobApplication::factory()->create();
+
+    $this->actingAs($application->user)->{$method}('/job-applications/'.$application->id.'/documents'.$path)
+        ->assertNotFound();
+
+    $this->assertModelExists($application);
+})->with([
+    ['get', ''], ['get', '/create'], ['post', ''], ['get', '/1'],
+    ['get', '/1/edit'], ['put', '/1'], ['delete', '/1'],
+]);
